@@ -1,236 +1,151 @@
-import { Cpu, Activity, Code2, Bot, Terminal } from "lucide-react";
+import { Activity, Cpu, Code2, Bot, Terminal, Wrench, BarChart3, Music, Mail, ExternalLink } from "lucide-react";
+import "./App.css";
 
-// 🔹 標題元件
-function SectionTitle({ title }) {
+/* ─── Section label ─── */
+function SectionLabel({ text }) {
+  return <div className="section-label">{text}</div>;
+}
+
+/* ─── Skill chip ─── */
+function SkillChip({ name, primary }) {
   return (
-    <div style={{ textAlign: "center", marginBottom: "30px" }}>
-      <h2 style={{ margin: 0 }}>{title}</h2>
-      <div
-        style={{
-          width: "40px",
-          height: "3px",
-          background: "#58a6ff",
-          margin: "8px auto 0",
-          borderRadius: "999px",
-        }}
-      />
-    </div>
+    <span className={`skill-chip ${primary ? "primary" : ""}`}>
+      {name}
+    </span>
   );
 }
 
-// 🔹 專案卡片
-function ProjectCard({ title, desc, icon: Icon }) {
+/* ─── Project card ─── */
+function ProjectCard({ title, desc, techs, status, icon: Icon }) {
   return (
-    <div
-      style={{
-        background: "#161b22",
-        padding: "24px",
-        borderRadius: "14px",
-        border: "1px solid #30363d",
-        transition: "all 0.3s ease",
-        cursor: "pointer",
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.border = "1px solid #58a6ff";
-        e.currentTarget.style.boxShadow = "0 0 20px rgba(88,166,255,0.25)";
-        e.currentTarget.style.transform = "translateY(-4px)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.border = "1px solid #30363d";
-        e.currentTarget.style.boxShadow = "none";
-        e.currentTarget.style.transform = "translateY(0)";
-      }}
-    >
-      {/* icon */}
-      <div
-        style={{
-          marginBottom: "12px",
-          color: "#58a6ff",
-        }}
-      >
-        {Icon && <Icon size={20} />}
+    <div className="project-card">
+      <div className="project-header">
+        <div className="project-title-row">
+          {Icon && <Icon size={18} className="project-icon" />}
+          <span className="project-name">{title}</span>
+        </div>
+        <span className={`project-status ${status === "shipped" ? "status-done" : "status-wip"}`}>
+          {status}
+        </span>
       </div>
-
-      {/* title */}
-      <h3 style={{ margin: "0 0 10px 0" }}>{title}</h3>
-
-      {/* desc */}
-      <p style={{ color: "#8b949e", marginBottom: "12px" }}>
-        {desc}
-      </p>
-
-      {/* fake link */}
-      <span
-        style={{
-          color: "#58a6ff",
-          fontSize: "14px",
-        }}
-      >
-        View Details →
-      </span>
+      <p className="project-desc">{desc}</p>
+      <div className="project-tech">
+        {techs.map((t) => (
+          <span key={t} className="tech-tag">{t}</span>
+        ))}
+      </div>
     </div>
   );
 }
 
-// 🔹 主頁
+/* ─── Main app ─── */
 export default function App() {
   return (
-    <div
-      style={{
-        background: "#0b1220",
-        color: "#c9d1d9",
-        minHeight: "100vh",
-        fontFamily: "system-ui, sans-serif",
-        padding: "40px 20px",
-      }}
-    >
-      <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
-        
-        {/* HERO */}
-        <section style={{ textAlign: "center", marginBottom: "72px" }}>
-          <h1 style={{ fontSize: "48px", margin: 0 }}>
-            Lin Tz-Xiang (Tzvi)
-          </h1>
-          <h3 style={{ color: "#58a6ff", marginTop: "10px" }}>
-            SI Engineer × Tool Builder
-          </h3>
-          <p style={{ color: "#8b949e" }}>
-            Solving real hardware engineering pain points with Python and frontend tools
+    <div className="site-wrapper">
+      <div className="site">
+
+        {/* ── HERO ── */}
+        <header className="hero">
+          <h1 className="hero-name">Lin Tz-Xiang (Tzvi)</h1>
+          <span className="hero-tag">SI Engineer × Tool Builder</span>
+          <p className="hero-desc">
+            Solving real hardware engineering pain points with Python and frontend tools.
+            <br />
+            If it can be automated, it should be.
+          </p>
+        </header>
+
+        {/* ── ABOUT ── */}
+        <section className="section">
+          <SectionLabel text="about" />
+          <p className="about-text">
+            什麼都想拆開看看怎麼動的。電機碩士，白天做 PCIe 高速訊號完整性分析（HFSS / ADS），
+            下班自幹 Python 自動化工具和街機控制器。相信好的工具應該讓工程師少開會、多做事。
           </p>
         </section>
 
-        {/* ABOUT */}
-        <section style={{ marginBottom: "72px" }}>
-          <SectionTitle title="About" />
-          <p style={{ textAlign: "center", maxWidth: "700px", margin: "0 auto", color: "#8b949e" }}>
-            M.S. in Electrical Engineering, specializing in high-speed Signal Integrity (PCIe / HFSS / ADS).
-            I build automation tools and custom arcade systems in my free time.
-          </p>
-        </section>
-
-        {/* SKILLS */}
-        <section style={{ marginBottom: "72px" }}>
-          <SectionTitle title="Skills" />
-          <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "12px" }}>
-            {[
-  { name: "Python", icon: Cpu },
-  { name: "HFSS / ADS", icon: Activity },
-  { name: "React", icon: Code2 },
-  { name: "Discord Bot", icon: Bot },
-  { name: "Linux / Docker", icon: Terminal },
-]
-.map((skill) => (
-  <div
-    key={skill.name}
-    style={{
-      background: "#161b22",
-      padding: "10px 16px",
-      borderRadius: "10px",
-      border: "1px solid #30363d",
-      display: "flex",
-      alignItems: "center",
-      gap: "6px",
-      transition: "all 0.25s ease",
-      cursor: "default",
-    }}
-    onMouseEnter={(e) => {
-      e.currentTarget.style.border = "1px solid #58a6ff";
-      e.currentTarget.style.boxShadow = "0 0 12px rgba(88,166,255,0.25)";
-      e.currentTarget.style.transform = "translateY(-2px)";
-    }}
-    onMouseLeave={(e) => {
-      e.currentTarget.style.border = "1px solid #30363d";
-      e.currentTarget.style.boxShadow = "none";
-      e.currentTarget.style.transform = "translateY(0)";
-    }}
-  >
-    <skill.icon size={16} />
-    <span>{skill.name}</span>
-  </div>
-))}
+        {/* ── SKILLS ── */}
+        <section className="section">
+          <SectionLabel text="skills" />
+          <div className="skills-group">
+            <div className="skills-row">
+              <SkillChip name="Python" primary />
+              <SkillChip name="HFSS / ADS" primary />
+              <SkillChip name="S-parameter" primary />
+            </div>
+            <div className="skills-row">
+              <SkillChip name="tkinter" />
+              <SkillChip name="matplotlib" />
+              <SkillChip name="openpyxl" />
+              <SkillChip name="React" />
+              <SkillChip name="Discord Bot" />
+              <SkillChip name="Linux / Docker" />
+            </div>
           </div>
         </section>
 
-        {/* PROJECTS */}
-        <section style={{ marginBottom: "72px" }}>
-          <SectionTitle title="Projects" />
-          <div
-  style={{
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(280px, 320px))",
-    gap: "24px",
-    justifyContent: "center",
-  }}
->
-           <ProjectCard
-  title="PCIe SI Analysis Dashboard"
-  desc="S-parameter analysis + PCIe compliance + visualization"
-  icon={Activity}
-/>
+        {/* ── PROJECTS ── */}
+        <section className="section">
+          <SectionLabel text="projects" />
 
-<ProjectCard
-  title="Engineering Progress Tracker"
-  desc="Real-time engineering tracking dashboard with audit logs"
-  icon={Cpu}
-/>
+          <ProjectCard
+            title="PCIe SI Analysis Dashboard"
+            desc="讀取 Touchstone 檔，自動比對 PCIe 6/7/8 規格，一鍵產出 pass/fail 報告與頻率響應圖表。"
+            techs={["Python", "tkinter", "matplotlib", "openpyxl"]}
+            status="shipped"
+            icon={BarChart3}
+          />
 
-<ProjectCard
-  title="Arcade Controller Integration"
-  desc="Custom arcade setup with hardware + acoustic design"
-  icon={Terminal}
-/>
+          <ProjectCard
+            title="Engineering Progress Tracker"
+            desc="取代無效會議，工程師自主更新任務狀態，所有操作自動記錄工號，主管即時看板追蹤。"
+            techs={["React", "Node.js", "SQLite"]}
+            status="in progress"
+            icon={Cpu}
+          />
 
-<div style={{ gridColumn: "1 / -1", display: "flex", justifyContent: "center" }}>
-  <div style={{ width: "320px" }}>
-    <ProjectCard
-      title="Discord Automation Bot"
-      desc="Automation bot for scheduling and repetitive workflows"
-      icon={Bot}
-    />
-  </div>
-</div>
+          <ProjectCard
+            title="Arcade Controller Integration"
+            desc="自建 43 吋直立街機環境，包含 segatools 整合、隔音工程與噪音量測優化。"
+            techs={["Hardware", "Acoustic design", "segatools"]}
+            status="shipped"
+            icon={Music}
+          />
+
+          <ProjectCard
+            title="Discord Automation Bot"
+            desc="自動化排程與重複性操作，減少手動介入的個人效率工具。"
+            techs={["Python", "Discord API"]}
+            status="shipped"
+            icon={Bot}
+          />
+        </section>
+
+        {/* ── CONTACT ── */}
+        <section className="section">
+          <SectionLabel text="contact" />
+          <div className="contact-grid">
+            <div className="contact-item">
+              <Mail size={16} className="contact-icon" />
+              <a href="mailto:aa3388997@gmail.com">aa3388997@gmail.com</a>
+            </div>
+            <div className="contact-item">
+              <ExternalLink size={16} className="contact-icon" />
+              <a
+                href="https://www.linkedin.com/in/tzxia-lin-910b92384"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                TzXia Lin
+              </a>
+            </div>
           </div>
         </section>
 
-        {/* CONTACT */}
-        <section style={{ textAlign: "center", marginTop: "80px" }}>
-  <SectionTitle title="Contact" />
-
-  <p style={{ color: "#8b949e", marginBottom: "20px" }}>
-    aa3388997@gmail.com
-  </p>
-
-  <a
-    href="https://www.linkedin.com/in/tzxia-lin-910b92384"
-    target="_blank"
-    rel="noopener noreferrer"
-    style={{
-      display: "inline-flex",
-      alignItems: "center",
-      gap: "8px",
-      padding: "10px 20px",
-      borderRadius: "10px",
-      border: "1px solid #30363d",
-      color: "#58a6ff",
-      textDecoration: "none",
-      transition: "all 0.25s ease",
-    }}
-    onMouseEnter={(e) => {
-      e.currentTarget.style.background = "rgba(88,166,255,0.1)";
-      e.currentTarget.style.boxShadow = "0 0 12px rgba(88,166,255,0.25)";
-      e.currentTarget.style.border = "1px solid #58a6ff";
-    }}
-    onMouseLeave={(e) => {
-      e.currentTarget.style.background = "transparent";
-      e.currentTarget.style.boxShadow = "none";
-      e.currentTarget.style.border = "1px solid #30363d";
-    }}
-  >
-    <span style={{ fontWeight: "500" }}>LinkedIn</span>
-    <span>→</span>
-  </a>
-</section>
-
+        {/* ── FOOTER ── */}
+        <footer className="footer">
+          <span>Built with curiosity. Last updated 2026.</span>
+        </footer>
       </div>
     </div>
   );
